@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: smart-chat-backend
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/db?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: admin # PLEASE UPDATE THIS
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Spring AI Configuration
+  ai:
+    dashscope:
+      api-key: ${AI_API_KEY:sk-xxx} # Replace with your actual key or env var
+      chat:
+        model: glm-4.7
+        options:
+          temperature: 0.7
+          functions: showReservationCard
+      embedding:
+        model: text-embedding-v1
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# Custom Configuration for Vector Store Logic
+smart-chat:
+  vector-store:
+    path: ./data/vector_store.json
