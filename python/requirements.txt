@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+aiomysql
+python-dotenv
+dashscope
+langchain
+langchain-community
+httpx
+cryptography
+pydantic-settings

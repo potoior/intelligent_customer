@@ -2,30 +2,14 @@
   <div class="chat-window pc-layout">
     <!-- 左侧导航栏 (PC端专属) -->
     <div class="chat-sidebar">
-      <div class="sidebar-logo">
-        <span class="logo-icon">💠</span>
-        <span class="logo-text">智慧城市</span>
-      </div>
-      
-      <div class="sidebar-menu">
-        <div class="menu-item active">
-          <i class="el-icon-chat-dot-round"></i>
-          <span>智能咨询</span>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <span class="logo-icon">💠</span>
+          <span class="logo-text" style="font-size: 18px;">智能对话与客服系统</span>
         </div>
-        <div class="menu-item">
-          <i class="el-icon-document"></i>
-          <span>产品库</span>
-        </div>
-        <div class="menu-item">
-          <i class="el-icon-user"></i>
-          <span>我的预约</span>
-        </div>
-      </div>
-
-      <div class="sidebar-footer">
         <div class="user-profile">
           <div class="mini-avatar">👤</div>
-          <span>管理员</span>
+          <span>客服</span>
         </div>
       </div>
     </div>
@@ -77,9 +61,21 @@
           @keyup.enter="sendMessage"
           size="large"
           :disabled="isThinking"
+          :rows="3"
+          type="textarea"
+          resize="none"
         >
           <template #append>
-            <el-button @click="sendMessage" type="primary" :loading="isThinking">发送咨询</el-button>
+            <el-button 
+              @click="sendMessage" 
+              type="primary" 
+              :loading="isThinking"
+              size="large"
+              style="height: 100%; min-height: 80px; border-radius: 0 8px 8px 0;"
+            >
+              <el-icon style="margin-right: 4px;"><Promotion /></el-icon>
+              发送咨询
+            </el-button>
           </template>
         </el-input>
         <div class="input-tip">按 Enter 发送消息，Shift + Enter 换行</div>
@@ -93,6 +89,7 @@ import { ref, nextTick, onUpdated } from 'vue'
 import { marked } from 'marked'
 import AppointmentCard from './AppointmentCard.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source' // Or use native fetch
+import { Promotion } from '@element-plus/icons-vue'
 
 const messages = ref([
   { role: 'assistant', type: 'text', content: '您好！我是您的智能客服助手。请问有什么可以帮您？' }
@@ -167,7 +164,7 @@ const sendMessage = async () => {
   let fullContent = ''
 
   try {
-    const response = await fetch('http://localhost:8080/api/chat/stream', {
+    const response = await fetch('http://120.76.218.38:9533/api/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -277,44 +274,65 @@ onUpdated(scrollToBottom)
   flex-direction: row;
   overflow: hidden;
   text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* 侧边栏样式 */
 .chat-sidebar {
-  width: 240px;
-  background: #2c3e50;
+  width: 280px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   display: flex;
   flex-direction: column;
   color: #fff;
-  padding: 20px 0;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  height: 100vh;
+  justify-content: space-between;
 }
-.sidebar-logo {
-  padding: 0 20px 30px;
+.sidebar-header {
+  padding: 20px 25px;
   display: flex;
+  flex-direction: column;
+  gap: 30px;
   align-items: center;
-  gap: 10px;
 }
-.logo-icon { font-size: 24px; }
-.logo-text { font-size: 18px; font-weight: bold; letter-spacing: 1px; }
 
-.sidebar-menu { flex: 1; padding: 0 10px; }
-.menu-item {
-  padding: 12px 15px;
-  margin-bottom: 5px;
-  border-radius: 8px;
-  cursor: pointer;
+.sidebar-logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.2s;
-  color: #bdc3c7;
 }
-.menu-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.menu-item.active { background: #409eff; color: #fff; }
+.logo-icon { font-size: 28px; }
+.logo-text { font-size: 20px; font-weight: 600; letter-spacing: 0.5px; }
 
-.sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-.user-profile { display: flex; align-items: center; gap: 10px; font-size: 14px; }
-.mini-avatar { width: 30px; height: 30px; background: #5d6d7e; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+
+.user-profile { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  font-size: 14px; 
+  padding: 20px 25px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  width: 100%;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+}
+.mini-avatar { 
+  width: 32px; 
+  height: 32px; 
+  background: linear-gradient(135deg, #5d6d7e, #4a5a6b); 
+  border-radius: 50%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 16px;
+}
 
 /* 主聊天区域 */
 .chat-main {
@@ -325,16 +343,20 @@ onUpdated(scrollToBottom)
 }
 
 .chat-header {
-  padding: 18px 25px;
+  padding: 20px 40px;
   border-bottom: 1px solid #f0f0f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(135deg, #fafbfc, #f5f7fa);
+  height: 70px;
+  box-sizing: border-box;
 }
 .chat-header h3 {
   margin: 0;
   font-weight: 600;
   color: #303133;
+  font-size: 20px;
 }
 .header-actions {
   display: flex;
@@ -342,9 +364,11 @@ onUpdated(scrollToBottom)
 }
 .messages-container {
   flex: 1;
-  padding: 30px 40px; /* PC端更大的边距 */
+  padding: 40px 60px; /* PC端更大的边距 */
   overflow-y: auto;
-  background: #fdfdfe;
+  background: linear-gradient(135deg, #fdfdfe 0%, #f8fafc 100%);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 /* 美化滚动条 */
 .messages-container::-webkit-scrollbar {
@@ -373,54 +397,66 @@ onUpdated(scrollToBottom)
   transition: all 0.3s ease;
 }
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #e1f3d8;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 10px;
-  font-size: 20px;
+  margin: 0 12px;
+  font-size: 22px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 .user-row .avatar {
   background: #d9ecff;
 }
 .message-content {
+  max-width: 65%;
+}
+.user-row .message-content {
   max-width: 70%;
 }
 .text-bubble {
   background: #fff;
-  padding: 12px 18px;
-  border-radius: 4px 16px 16px 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  line-height: 1.6;
-  font-size: 14.5px;
+  padding: 16px 22px;
+  border-radius: 8px 20px 20px 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  line-height: 1.7;
+  font-size: 15px;
   color: #3c4043;
+  border: 1px solid #f0f0f0;
 }
 .user-row .text-bubble {
   background: linear-gradient(135deg, #409eff, #1d82e6);
   color: #fff;
-  border-radius: 16px 4px 16px 16px;
+  border-radius: 20px 8px 20px 20px;
+  border: none;
 }
 
 /* Markdown 内部元素深度渲染 */
 .text-bubble :deep(p) {
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.text-bubble :deep(p):last-child {
+  margin-bottom: 0;
 }
 .text-bubble :deep(h1), .text-bubble :deep(h2), .text-bubble :deep(h3) {
-  margin: 16px 0 8px 0;
+  margin: 20px 0 12px 0;
   color: #2c3e50;
-  font-weight: 700;
+  font-weight: 600;
 }
 .text-bubble :deep(h3) {
-  font-size: 17px;
+  font-size: 18px;
   color: #409eff;
   border-left: 4px solid #409eff;
-  padding-left: 10px;
+  padding-left: 12px;
   background: #f0f7ff;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   border-radius: 0 4px 4px 0;
 }
 .text-bubble :deep(p:last-child) {
@@ -488,20 +524,101 @@ onUpdated(scrollToBottom)
 }
 
 .input-area {
-  padding: 25px 40px;
-  background: #fff;
+  padding: 30px 60px;
+  background: linear-gradient(135deg, #fff 0%, #fafbfc 100%);
   border-top: 1px solid #f0f0f0;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
 }
 .input-tip {
-  margin-top: 10px;
-  font-size: 12px;
+  margin-top: 12px;
+  font-size: 13px;
   color: #909399;
   text-align: left;
+  opacity: 0.8;
+}
+
+/* 优化输入框样式 */
+:deep(.el-textarea__inner) {
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #dcdfe6;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+}
+:deep(.el-textarea__inner:focus) {
+  border-color: #409eff;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+:deep(.el-textarea__inner:hover) {
+  border-color: #c0c4cc;
+}
+
+/* 优化按钮样式 */
+:deep(.el-input-group__append) {
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #dcdfe6;
+  border-left: none;
+  background: transparent;
+  padding: 0;
+}
+:deep(.el-button--primary) {
+  border-radius: 0 8px 8px 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 /* 响应式调整：如果是小屏幕PC，稍微收缩 */
 @media screen and (max-height: 800px) {
   .chat-window {
     height: 95vh;
+  }
+}
+
+/* PC端大屏幕优化 */
+@media screen and (min-width: 1920px) {
+  .chat-sidebar {
+    width: 320px;
+  }
+  .messages-container {
+    padding: 50px 80px;
+    max-width: 1400px;
+  }
+  .chat-header {
+    padding: 25px 80px;
+  }
+  .input-area {
+    padding: 35px 80px;
+  }
+  .text-bubble {
+    font-size: 16px;
+    padding: 18px 26px;
+  }
+}
+
+@media screen and (min-width: 2560px) {
+  .chat-sidebar {
+    width: 360px;
+  }
+  .sidebar-logo {
+    padding: 0 30px 50px;
+  }
+  .logo-text {
+    font-size: 22px;
+  }
+  .menu-item {
+    padding: 16px 22px;
+    font-size: 16px;
+  }
+}
+
+/* 高DPI屏幕优化 */
+@media screen and (-webkit-min-device-pixel-ratio: 2), 
+       screen and (min-resolution: 192dpi) {
+  .text-bubble {
+    font-weight: 400;
+  }
+  .chat-header h3 {
+    font-weight: 500;
   }
 }
 </style>

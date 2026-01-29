@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9533
 
 spring:
   application:
@@ -7,15 +7,15 @@ spring:
   
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/db?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/tab107_customer?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: admin # PLEASE UPDATE THIS
+    password: 123456 # PLEASE UPDATE THIS
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # Spring AI Configuration
   ai:
     dashscope:
-      api-key: ${AI_API_KEY:sk-xxx} # Replace with your actual key or env var
+      api-key: ${AI_API_KEY:sk-f4d39a6965264d93b690ca2cb529e262} # Replace with your actual key or env var
       chat:
         model: glm-4.7
         options:

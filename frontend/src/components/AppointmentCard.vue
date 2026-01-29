@@ -68,7 +68,7 @@ const onSubmit = async () => {
        // userId 后端会处理
     }
     
-    const response = await fetch('http://localhost:8080/api/contact/submit', {
+    const response = await fetch('http://120.76.218.38:9533/api/contact/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
